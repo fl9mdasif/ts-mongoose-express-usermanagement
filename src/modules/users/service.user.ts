@@ -18,6 +18,24 @@ const createUser = async (userData: TUser) => {
 
   return result;
 };
+
+const getAllUser = async () => {
+  const result = await User.find();
+  return result;
+};
+
+// get single user
+const getSingleUser = async (id: string) => {
+  const result = await User.findOne({ id });
+  return result;
+};
+
+const deleteSingleStudent = async (id: string) => {
+  const result = await Student.updateOne({ id }, { isDeleted: true });
+  return result;
+};
 export const UserServices = {
   createUser,
+  getAllUser,
+  getSingleUser,
 };
