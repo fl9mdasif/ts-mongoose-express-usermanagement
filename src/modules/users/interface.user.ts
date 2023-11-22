@@ -29,5 +29,5 @@ export type TUser = {
 
 export interface UserModel extends Model<TUser> {
   // eslint-disable-next-line no-unused-vars
-  isUserExists(id: string): Promise<TUser | null>;
+  isUserExists(id: number): Promise<TUser | null>;
 }

@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { TUser, TUserName, UserModel } from "./interface.users";
+import { TUser, TUserName, UserModel } from "./interface.user";
 // import bcrypt from 'bcrypt';
 // import config from '../config';
 
@@ -40,7 +40,6 @@ const userSchema = new Schema<TUser>(
     userId: {
       type: Number,
       required: true,
-      index: true,
       unique: true,
     },
     userName: {
@@ -71,13 +70,13 @@ const userSchema = new Schema<TUser>(
       required: [true, "Status is required"],
       default: true,
     },
-    orders: { type: [userOrderSchema], default: undefined },
-  },
-  {
-    toJSON: {
-      virtuals: true,
-    },
+    orders: { type: [userOrderSchema] },
   }
+  // {
+  //   toJSON: {
+  //     virtuals: true,
+  //   },
+  // }
 );
 
 // Virtual adds a new field
@@ -126,10 +125,10 @@ const userSchema = new Schema<TUser>(
 // });
 
 // creating custom static methods
-// studentSchema.statics.isUserExists = async function (id: string) {
-//   const existingUser = await Student.findOne({ id });
-//   return existingUser;
-// };
+userSchema.statics.isUserExists = async function (id: string) {
+  const existingUser = await User.findOne({ id });
+  return existingUser;
+};
 
 // custom instance method
 // studentSchema.methods.isUserExists = async function (id: string) {
