@@ -47,25 +47,6 @@ const getAllUser = async (req: Request, res: Response) => {
   }
 };
 
-const updateUser = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const result = await UserServices.getSingleUser(id);
-
-    res.status(200).json({
-      success: true,
-      message: "User fetched successfully!",
-      data: result,
-    });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || "Something went wrong",
-      error: err,
-    });
-  }
-};
 const getSingleUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -86,9 +67,50 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+const updateUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { data: updatedData } = req.body;
+    const result = await UserServices.updateUser(id, updatedData);
+
+    res.status(200).json({
+      success: true,
+      message: "User updated successfully!",
+      data: result,
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || "Something went wrong",
+      error: err,
+    });
+  }
+};
+
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const result = await UserServices.deleteUser(id);
+
+    res.status(200).json({
+      success: true,
+      message: "User Deleted successfully!",
+      data: result,
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || "Something went wrong",
+      error: err,
+    });
+  }
+};
 export const userControllers = {
   createUser,
   getAllUser,
   getSingleUser,
   updateUser,
+  deleteUser,
 };
