@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { TUser, TUserName, UserModel } from "./interface.user";
-// import bcrypt from 'bcrypt';
+import config from "../../config";
+import bcrypt from "bcrypt";
 // import config from '../config';
 
 // sub schema
@@ -45,6 +46,7 @@ const userSchema = new Schema<TUser>(
     userName: {
       type: String,
       required: true,
+      unique: true,
     },
 
     password: {
@@ -105,22 +107,28 @@ const userSchema = new Schema<TUser>(
 // });
 // creating middleware
 
-// studentSchema.pre('save', async function (next) {
-//   // eslint-disable-next-line @typescript-eslint/no-this-alias
-//   const student = this;
+// before sending data to db
+userSchema.pre("save", async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const users = this;
 
-//   // Store hash in your password DB.
+  // Store hashing  password into DB.
 
-//   student.password = await bcrypt.hash(
-//     student.password,
-//     Number(config.bcrypt_salt_round),
-//   );
-//   next();
-// });
+  users.password = await bcrypt.hash(
+    users.password,
+    Number(config.bcrypt_salt_round)
+  );
+  next();
+});
 
-// after staved data that works {password = ""}
-// studentSchema.post('save', function (document, next) {
-//   document.password = '';
+// after saved data that works {password = ""}
+userSchema.post("save", function (document, next) {
+  document.password = "";
+  next();
+});
+
+// userSchema.post("findOne", async function (document, next) {
+//   document.password = "";
 //   next();
 // });
 
@@ -130,12 +138,27 @@ userSchema.statics.isUserExists = async function (id: string) {
   return existingUser;
 };
 
-// custom instance method
-// studentSchema.methods.isUserExists = async function (id: string) {
-//   const existingUser = await Student.findOne({ id });
-//   return existingUser;
-// };
+userSchema.statics.addProductToOrders = async function (
+  userId: number,
+  orderData: { productName: string; price: number; quantity: number }
+) {
+  const user = await this.findOne({ userId });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  if (user.orders) {
+    user.orders.push(orderData);
+  } else {
+    user.orders = [orderData];
+  }
+
+  const updatedUser = await user.save();
+
+  return updatedUser.orders;
+};
 
 export const User = model<TUser, UserModel>("User", userSchema);
 
-// 'Student' is the collection name
+// '"User"' is the collection name

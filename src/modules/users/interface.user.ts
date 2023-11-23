@@ -5,7 +5,7 @@ export type TUserName = {
   lastName: string;
 };
 
-type TOrder = {
+export type TOrder = {
   productName: string;
   price: number;
   quantity: number;
@@ -30,4 +30,11 @@ export type TUser = {
 export interface UserModel extends Model<TUser> {
   // eslint-disable-next-line no-unused-vars
   isUserExists(id: number | string): Promise<TUser | null>;
+}
+export interface UserModel extends Model<TUser> {
+  // eslint-disable-next-line no-unused-vars
+  addProductToOrders(
+    id: number | string,
+    orderData: { productName: string; price: number; quantity: number }
+  ): Promise<TUser | null>;
 }
