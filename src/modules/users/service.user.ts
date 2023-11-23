@@ -33,16 +33,11 @@ const getSingleUser = async (id: string) => {
 const updateUser = async (id: string, data: TUser) => {
   const result = await User.updateOne(
     { userId: id },
-    { $set: data },
+    { $set: { data } },
     {
       new: true,
     }
   );
-  console.log("up", result);
-  return result;
-};
-const updateUserOrder = async (id: string, data: TOrder) => {
-  const result = await User.addProductToOrders(Number(id), data);
   // console.log("up", result);
   return result;
 };
@@ -53,6 +48,14 @@ const deleteUser = async (id: string) => {
   return result;
 };
 
+// update user order
+const updateUserOrder = async (id: string, data: TOrder) => {
+  const result = await User.addProductToOrders(Number(id), data);
+  // console.log("up", result);
+  return result;
+};
+
+// user orders
 const getUserOrder = async (id: string) => {
   const result = await User.getUserOrders(id);
   return result;

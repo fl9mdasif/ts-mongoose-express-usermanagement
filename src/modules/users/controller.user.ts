@@ -73,7 +73,7 @@ const updateUser = async (req: Request, res: Response) => {
     const { userId } = req.params;
     const updatedData = req.body;
 
-    // console.log("update:", userId, "userData", updatedData);
+    console.log("userData", updatedData);
 
     const result = await UserServices.updateUser(userId, updatedData);
 
