@@ -53,6 +53,11 @@ const deleteUser = async (id: string) => {
   return result;
 };
 
+const getUserOrder = async (id: string) => {
+  const result = await User.getUserOrders(id);
+  return result;
+};
+
 export const UserServices = {
   createUser,
   getAllUser,
@@ -60,4 +65,5 @@ export const UserServices = {
   updateUser,
   deleteUser,
   updateUserOrder,
+  getUserOrder,
 };

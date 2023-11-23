@@ -138,6 +138,7 @@ userSchema.statics.isUserExists = async function (id: string) {
   return existingUser;
 };
 
+// update order middleware
 userSchema.statics.addProductToOrders = async function (
   userId: number,
   orderData: { productName: string; price: number; quantity: number }
@@ -157,6 +158,17 @@ userSchema.statics.addProductToOrders = async function (
   const updatedUser = await user.save();
 
   return updatedUser.orders;
+};
+
+// find users order
+userSchema.statics.getUserOrders = async function (userId: number) {
+  const user = await this.findOne({ userId });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user.orders;
 };
 
 export const User = model<TUser, UserModel>("User", userSchema);

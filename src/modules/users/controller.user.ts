@@ -92,7 +92,28 @@ const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-const updateOrder = async (req: Request, res: Response) => {
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    // console.log(userId);
+    const result = await UserServices.deleteUser(userId);
+
+    res.status(200).json({
+      success: true,
+      message: "User Deleted successfully!",
+      data: result,
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || "Something went wrong",
+      error: err,
+    });
+  }
+};
+
+const updateUserOrder = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const updatedData = req.body;
@@ -115,16 +136,16 @@ const updateOrder = async (req: Request, res: Response) => {
   }
 };
 
-const deleteUser = async (req: Request, res: Response) => {
+const getUserOrder = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    // console.log(userId);
-    const result = await UserServices.deleteUser(userId);
+
+    const result = await UserServices.getUserOrder(userId);
 
     res.status(200).json({
       success: true,
-      message: "User Deleted successfully!",
-      data: result,
+      message: "User fetched successfully!",
+      orders: result,
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
@@ -135,12 +156,12 @@ const deleteUser = async (req: Request, res: Response) => {
     });
   }
 };
-
 export const userControllers = {
   createUser,
   getAllUser,
   getSingleUser,
   updateUser,
   deleteUser,
-  updateOrder,
+  updateUserOrder,
+  getUserOrder,
 };
