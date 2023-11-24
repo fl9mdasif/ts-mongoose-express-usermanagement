@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { TOrder, TUser } from "./interface.user";
+import { TOrder, TUpdateUser, TUser } from "./interface.user";
 import { User } from "./mode.user";
 
 const createUser = async (userData: TUser) => {
@@ -31,32 +31,11 @@ const getSingleUser = async (id: string) => {
 };
 
 // update user
-const updateUser = async (id: string, data: TUser) => {
-  try {
-    const result = await User.updateOne(
-      { userId: id },
-      {
-        $set: {
-          userId: data?.userId,
-          userName: data.userName,
-          fullName: data?.fullName,
-          email: data?.email,
-          age: data?.age,
-          hobbies: data?.hobbies,
-          address: data?.address,
-          orders: data?.orders,
-        },
-      },
-      {
-        new: true,
-        // runValidators: true,
-      }
-    );
+const updateUser = async (userId: number | string, data: TUpdateUser) => {
+  // console.log(userId);
+  const result = await User.updateOne({ userId }, data);
 
-    return result;
-  } catch (err) {
-    throw new Error("error comes from update user");
-  }
+  return result;
 };
 
 // delete user
@@ -83,6 +62,19 @@ const getUserOrder = async (id: string) => {
   return result?.orders;
 };
 
+const calculateOrders = async (id: string) => {
+  const user = await User.findOne({ userId: id });
+  if (!user) {
+    throw new Error("User not found");
+  }
+  const totalOrderPrice =
+    user.orders?.reduce(
+      (total, orders) => total + orders.price * orders.quantity,
+      0
+    ) || 0;
+  return totalOrderPrice;
+};
+
 export const UserServices = {
   createUser,
   getAllUser,
@@ -91,4 +83,5 @@ export const UserServices = {
   deleteUser,
   updateUserOrder,
   getUserOrder,
+  calculateOrders,
 };

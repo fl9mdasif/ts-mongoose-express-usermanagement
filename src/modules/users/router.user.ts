@@ -10,6 +10,7 @@ router.delete("/:userId", userControllers.deleteUser); // use the param 'userId'
 // order routes
 router.put("/:userId/orders", userControllers.updateUserOrder); // use the param 'userId' same to controller
 router.get("/:userId/orders", userControllers.getUserOrder); // use the param 'userId' same to controller
+router.get("/:userId/orders/total-price", userControllers.calculateOrders); // use the param 'userId' same to controller
 
 router.get("/", userControllers.getAllUser);
 router.post("/", userControllers.createUser);

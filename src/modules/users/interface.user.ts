@@ -27,15 +27,22 @@ export type TUser = {
   orders?: TOrder[];
 };
 
+export type TUpdateUser = {
+  userId: number;
+  userName: string;
+  fullName: TUserName;
+  age: number;
+  email: string;
+  isActive: boolean;
+  hobbies: string[];
+  address: {
+    street: string;
+    city: string;
+    country: string;
+  };
+  orders?: TOrder[];
+};
 export interface UserModel extends Model<TUser> {
   // eslint-disable-next-line no-unused-vars
   isUserExists(id: number | string): Promise<TUser | null>;
-}
-
-export interface UserModel extends Model<TUser> {
-  // eslint-disable-next-line no-unused-vars
-  updateUserInformation(
-    id: number | string,
-    data: TUser
-  ): Promise<TUser | null>;
 }

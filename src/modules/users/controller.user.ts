@@ -71,15 +71,35 @@ const getSingleUser = async (req: Request, res: Response) => {
 
 const updateUser = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
+    const userId = Number(req.params.userId);
     const updatedData: TUser = req.body;
 
     const result = await UserServices.updateUser(userId, updatedData);
+    if (result.matchedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+        error: {
+          code: 404,
+          description: "User not found!",
+        },
+      });
+    }
+    const userData = {
+      userId: updatedData.userId,
+      userName: updatedData.userName,
+      fullName: updatedData.fullName,
+      age: updatedData.age,
+      email: updatedData.email,
+      isActive: updatedData.isActive,
+      hobbies: updatedData.hobbies,
+      address: updatedData.address,
+    };
 
     res.status(200).json({
       success: true,
       message: "User updated successfully!",
-      data: result,
+      data: userData,
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
@@ -159,6 +179,28 @@ const getUserOrder = async (req: Request, res: Response) => {
   }
 };
 
+// calculate orders
+const calculateOrders = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+
+    const result = await UserServices.calculateOrders(userId);
+
+    res.status(200).json({
+      success: true,
+      message: "Total price calculated successfully!",
+      totalPrice: result,
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || "Something went wrong",
+      error: err,
+    });
+  }
+};
+
 export const userControllers = {
   createUser,
   getAllUser,
@@ -167,4 +209,5 @@ export const userControllers = {
   deleteUser,
   updateUserOrder,
   getUserOrder,
+  calculateOrders,
 };
