@@ -2,6 +2,7 @@ import { Schema, model } from "mongoose";
 import { TUser, TUserName, UserModel } from "./interface.user";
 import config from "../../config";
 import bcrypt from "bcrypt";
+import { response } from "express";
 // import config from '../config';
 
 // sub schema
@@ -127,10 +128,54 @@ userSchema.post("save", function (document, next) {
   next();
 });
 
-// userSchema.post("findOne", async function (document, next) {
-//   document.password = "";
-//   next();
-// });
+// update user with static methods
+userSchema.statics.updateUserInformation = async function (
+  userId: number,
+  updatedData: TUser
+) {
+  try {
+    // console.log("Updating user with ID:", userId);
+    // console.log("Updated data:", updatedData);
+
+    const singleUser = await User.findOne({ userId });
+    if (!singleUser) {
+      throw new Error("user not found");
+    }
+
+    // update user Information
+    singleUser.userId =
+      updatedData.userId !== undefined ? updatedData.userId : singleUser.userId;
+    singleUser.userName = updatedData.userName || singleUser.userName;
+    singleUser.fullName = updatedData.fullName || singleUser.fullName;
+    singleUser.email = updatedData.email || singleUser.email;
+    singleUser.age = updatedData.age || singleUser.age;
+    singleUser.hobbies = updatedData.hobbies || singleUser.hobbies;
+    singleUser.address = updatedData.address || singleUser.address;
+    singleUser.isActive =
+      updatedData.isActive !== undefined
+        ? updatedData.isActive
+        : singleUser.isActive;
+    singleUser.orders = updatedData.orders || singleUser.orders;
+
+    const updatedUser = await singleUser.save((err, saved) => {
+      if (err) {
+        return response.status(500).send(err);
+      }
+      return response.json({ user: saved });
+    });
+
+    console.log("this", updatedUser);
+
+    // Exclude the password field from the response
+    const userWithoutPassword = updatedUser.toObject();
+    delete userWithoutPassword.password;
+
+    return updatedUser;
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw new Error("Error updating user");
+  }
+};
 
 // creating custom static methods
 userSchema.statics.isUserExists = async function (id: string) {
@@ -138,39 +183,7 @@ userSchema.statics.isUserExists = async function (id: string) {
   return existingUser;
 };
 
-// update order middleware
-userSchema.statics.addProductToOrders = async function (
-  userId: number,
-  orderData: { productName: string; price: number; quantity: number }
-) {
-  const user = await this.findOne({ userId });
-
-  if (!user) {
-    throw new Error("User not found");
-  }
-
-  if (user.orders) {
-    user.orders.push(orderData);
-  } else {
-    user.orders = [orderData];
-  }
-
-  const updatedUser = await user.save();
-
-  return updatedUser.orders;
-};
-
-// find users order
-userSchema.statics.getUserOrders = async function (userId: number) {
-  const user = await this.findOne({ userId });
-
-  if (!user) {
-    throw new Error("User not found");
-  }
-
-  return user.orders;
-};
-
+// User
 export const User = model<TUser, UserModel>("User", userSchema);
 
 // '"User"' is the collection name

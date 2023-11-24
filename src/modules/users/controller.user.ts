@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { userValidationSchema } from "./validation.user";
 import { UserServices } from "./service.user";
+import { TUser } from "./interface.user";
 
 export const createUser = async (req: Request, res: Response) => {
   try {
@@ -71,9 +72,7 @@ const getSingleUser = async (req: Request, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const updatedData = req.body;
-
-    console.log("userData", updatedData);
+    const updatedData: TUser = req.body;
 
     const result = await UserServices.updateUser(userId, updatedData);
 
@@ -92,6 +91,7 @@ const updateUser = async (req: Request, res: Response) => {
   }
 };
 
+// delete a specific user
 const deleteUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -113,6 +113,7 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
+// update the order property from order
 const updateUserOrder = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -136,6 +137,7 @@ const updateUserOrder = async (req: Request, res: Response) => {
   }
 };
 
+// get all orders of a user
 const getUserOrder = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -144,7 +146,7 @@ const getUserOrder = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: "User fetched successfully!",
+      message: "Order fetched successfully!",
       orders: result,
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -156,6 +158,7 @@ const getUserOrder = async (req: Request, res: Response) => {
     });
   }
 };
+
 export const userControllers = {
   createUser,
   getAllUser,

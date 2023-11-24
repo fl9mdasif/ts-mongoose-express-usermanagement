@@ -30,16 +30,33 @@ const getSingleUser = async (id: string) => {
   // const result = User.aggregate([{ $match: { userId: id } }]);
 };
 
+// update user
 const updateUser = async (id: string, data: TUser) => {
-  const result = await User.updateOne(
-    { userId: id },
-    { $set: { data } },
-    {
-      new: true,
-    }
-  );
-  // console.log("up", result);
-  return result;
+  try {
+    const result = await User.updateOne(
+      { userId: id },
+      {
+        $set: {
+          userId: data?.userId,
+          userName: data.userName,
+          fullName: data?.fullName,
+          email: data?.email,
+          age: data?.age,
+          hobbies: data?.hobbies,
+          address: data?.address,
+          orders: data?.orders,
+        },
+      },
+      {
+        new: true,
+        // runValidators: true,
+      }
+    );
+
+    return result;
+  } catch (err) {
+    throw new Error("error comes from update user");
+  }
 };
 
 // delete user
@@ -49,16 +66,21 @@ const deleteUser = async (id: string) => {
 };
 
 // update user order
-const updateUserOrder = async (id: string, data: TOrder) => {
-  const result = await User.addProductToOrders(Number(id), data);
-  // console.log("up", result);
+const updateUserOrder = async (id: string, orderData: TOrder) => {
+  const result = await User.updateOne(
+    { userId: id },
+    { $addToSet: { orders: orderData } }
+  );
   return result;
 };
 
 // user orders
 const getUserOrder = async (id: string) => {
-  const result = await User.getUserOrders(id);
-  return result;
+  const result = await User.findOne({ userId: id });
+  if (!result) {
+    throw new Error("User not found");
+  }
+  return result?.orders;
 };
 
 export const UserServices = {
