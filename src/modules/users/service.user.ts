@@ -39,8 +39,6 @@ const updateUser = async (userId: number | string, data: TUpdateUser) => {
 
 // delete user
 const deleteUser = async (id: string) => {
-  // const userExists = await User.isUserExists(id);
-
   const result = await User.deleteOne({ userId: id });
   return result;
 };
