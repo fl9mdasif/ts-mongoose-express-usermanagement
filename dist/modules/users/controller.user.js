@@ -159,8 +159,17 @@ const updateUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function
     try {
         const { userId } = req.params;
         const orderData = req.body;
-        // console.log(req.params, orderData);
         const result = yield service_user_1.UserServices.updateUserOrder(userId, orderData);
+        if ((result === null || result === void 0 ? void 0 : result.matchedCount) === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found',
+                error: {
+                    code: 404,
+                    description: 'User not found!',
+                },
+            });
+        }
         res.status(200).json({
             success: true,
             message: 'Order Created successfully!',
@@ -181,6 +190,17 @@ const getUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     try {
         const { userId } = req.params;
         const result = yield service_user_1.UserServices.getUserOrder(userId);
+        // console.log(result);
+        if (!result) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found',
+                error: {
+                    code: 404,
+                    description: 'User not found!',
+                },
+            });
+        }
         res.status(200).json({
             success: true,
             message: 'Order fetched successfully!',
@@ -201,6 +221,16 @@ const calculateOrders = (req, res) => __awaiter(void 0, void 0, void 0, function
     try {
         const { userId } = req.params;
         const result = yield service_user_1.UserServices.calculateOrders(userId);
+        if (!result) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found',
+                error: {
+                    code: 404,
+                    description: 'User not found!',
+                },
+            });
+        }
         res.status(200).json({
             success: true,
             message: 'Total price calculated successfully!',

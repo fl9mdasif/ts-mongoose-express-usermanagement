@@ -13,7 +13,16 @@ const createUser = async (userData: TUser) => {
 
 const getAllUser = async () => {
   const result = await User.aggregate([
-    { $project: { userName: 1, fullName: 1, age: 1, email: 1, address: 1 } },
+    {
+      $project: {
+        _id: 0,
+        userName: 1,
+        fullName: 1,
+        age: 1,
+        email: 1,
+        address: 1,
+      },
+    },
   ]);
   return result;
 };
@@ -22,7 +31,15 @@ const getAllUser = async () => {
 const getSingleUser = async (id: string) => {
   const result = await User.findOne(
     { userId: id },
-    { userId: 1, userName: 1, fullName: 1, age: 1, email: 1, address: 1 },
+    {
+      _id: 0,
+      userId: 1,
+      userName: 1,
+      fullName: 1,
+      age: 1,
+      email: 1,
+      address: 1,
+    },
   );
   return result;
 
@@ -55,19 +72,15 @@ const updateUserOrder = async (id: string, orderData: TOrder) => {
 // user orders
 const getUserOrder = async (id: string) => {
   const result = await User.findOne({ userId: id });
-  if (!result) {
-    throw new Error('User not found');
-  }
+
   return result?.orders;
 };
 
 const calculateOrders = async (id: string) => {
   const user = await User.findOne({ userId: id });
-  if (!user) {
-    throw new Error('User not found');
-  }
+
   const totalOrderPrice =
-    user.orders?.reduce(
+    user?.orders?.reduce(
       (total, orders) => total + orders.price * orders.quantity,
       0,
     ) || 0;

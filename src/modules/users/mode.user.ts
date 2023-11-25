@@ -5,37 +5,46 @@ import bcrypt from 'bcrypt';
 // import config from '../config';
 
 // sub schema
-const userNameSchema = new Schema<TUserName>({
-  firstName: {
-    type: String,
-    required: [true, 'First name is required'],
-    maxlength: [20, "first name can't be greater than 20 by length"],
-    validate: function (value: string) {
-      // validate mongoose inbuilt validator
+const userNameSchema = new Schema<TUserName>(
+  {
+    firstName: {
+      type: String,
+      required: [true, 'First name is required'],
+      maxlength: [20, "first name can't be greater than 20 by length"],
+      validate: function (value: string) {
+        // validate mongoose inbuilt validator
 
-      const nameCapitalized = value.charAt(0).toUpperCase() + value.slice(1);
-      return value === nameCapitalized;
+        const nameCapitalized = value.charAt(0).toUpperCase() + value.slice(1);
+        return value === nameCapitalized;
+      },
+    },
+
+    lastName: {
+      type: String,
+      required: [true, 'Last name is required'],
     },
   },
+  { _id: false },
+); // Set _id to false to prevent automatic generation);
 
-  lastName: {
-    type: String,
-    required: [true, 'Last name is required'],
+const userAddressSchema = new Schema(
+  {
+    street: { type: String, required: true },
+    city: { type: String, required: true },
+    country: { type: String, required: true },
+    // _id: false,
   },
-});
+  { _id: false },
+);
 
-const userAddressSchema = new Schema({
-  street: { type: String, required: true },
-  city: { type: String, required: true },
-  country: { type: String, required: true },
-  // _id: false,
-});
-
-const userOrderSchema = new Schema({
-  productName: { type: String, required: true },
-  price: { type: Number, required: true },
-  quantity: { type: Number, required: true },
-});
+const userOrderSchema = new Schema(
+  {
+    productName: { type: String, required: true },
+    price: { type: Number, required: true },
+    quantity: { type: Number, required: true },
+  },
+  { _id: false },
+);
 
 // User Schema
 const userSchema = new Schema<TUser>({

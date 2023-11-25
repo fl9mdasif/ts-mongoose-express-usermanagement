@@ -160,9 +160,17 @@ const updateUserOrder = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const orderData = req.body;
-    // console.log(req.params, orderData);
-
     const result = await UserServices.updateUserOrder(userId, orderData);
+    if (result?.matchedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
 
     res.status(200).json({
       success: true,
@@ -185,7 +193,17 @@ const getUserOrder = async (req: Request, res: Response) => {
     const { userId } = req.params;
 
     const result = await UserServices.getUserOrder(userId);
-
+    // console.log(result);
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
     res.status(200).json({
       success: true,
       message: 'Order fetched successfully!',
@@ -207,7 +225,16 @@ const calculateOrders = async (req: Request, res: Response) => {
     const { userId } = req.params;
 
     const result = await UserServices.calculateOrders(userId);
-
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
     res.status(200).json({
       success: true,
       message: 'Total price calculated successfully!',

@@ -21,13 +21,30 @@ const createUser = (userData) => __awaiter(void 0, void 0, void 0, function* () 
 });
 const getAllUser = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield mode_user_1.User.aggregate([
-        { $project: { userName: 1, fullName: 1, age: 1, email: 1, address: 1 } },
+        {
+            $project: {
+                _id: 0,
+                userName: 1,
+                fullName: 1,
+                age: 1,
+                email: 1,
+                address: 1,
+            },
+        },
     ]);
     return result;
 });
 // get single user
 const getSingleUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield mode_user_1.User.findOne({ userId: id }, { userId: 1, userName: 1, fullName: 1, age: 1, email: 1, address: 1 });
+    const result = yield mode_user_1.User.findOne({ userId: id }, {
+        _id: 0,
+        userId: 1,
+        userName: 1,
+        fullName: 1,
+        age: 1,
+        email: 1,
+        address: 1,
+    });
     return result;
     // const result = User.aggregate([{ $match: { userId: id } }]);
 });
@@ -50,18 +67,12 @@ const updateUserOrder = (id, orderData) => __awaiter(void 0, void 0, void 0, fun
 // user orders
 const getUserOrder = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield mode_user_1.User.findOne({ userId: id });
-    if (!result) {
-        throw new Error('User not found');
-    }
     return result === null || result === void 0 ? void 0 : result.orders;
 });
 const calculateOrders = (id) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const user = yield mode_user_1.User.findOne({ userId: id });
-    if (!user) {
-        throw new Error('User not found');
-    }
-    const totalOrderPrice = ((_a = user.orders) === null || _a === void 0 ? void 0 : _a.reduce((total, orders) => total + orders.price * orders.quantity, 0)) || 0;
+    const totalOrderPrice = ((_a = user === null || user === void 0 ? void 0 : user.orders) === null || _a === void 0 ? void 0 : _a.reduce((total, orders) => total + orders.price * orders.quantity, 0)) || 0;
     return totalOrderPrice;
 });
 exports.UserServices = {

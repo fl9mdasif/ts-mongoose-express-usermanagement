@@ -33,18 +33,18 @@ const userNameSchema = new mongoose_1.Schema({
         type: String,
         required: [true, 'Last name is required'],
     },
-});
+}, { _id: false }); // Set _id to false to prevent automatic generation);
 const userAddressSchema = new mongoose_1.Schema({
     street: { type: String, required: true },
     city: { type: String, required: true },
     country: { type: String, required: true },
     // _id: false,
-});
+}, { _id: false });
 const userOrderSchema = new mongoose_1.Schema({
     productName: { type: String, required: true },
     price: { type: Number, required: true },
     quantity: { type: Number, required: true },
-});
+}, { _id: false });
 // User Schema
 const userSchema = new mongoose_1.Schema({
     userId: {
