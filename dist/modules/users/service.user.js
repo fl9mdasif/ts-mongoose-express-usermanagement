@@ -14,7 +14,7 @@ const mode_user_1 = require("./mode.user");
 const createUser = (userData) => __awaiter(void 0, void 0, void 0, function* () {
     // built in static instance method
     if (yield mode_user_1.User.isUserExists(userData.userId)) {
-        throw new Error("User already exists");
+        throw new Error('User already exists');
     }
     const result = yield mode_user_1.User.create(userData);
     return result;
@@ -39,8 +39,6 @@ const updateUser = (userId, data) => __awaiter(void 0, void 0, void 0, function*
 });
 // delete user
 const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const userExists = yield mode_user_1.User.isUserExists(id);
-    console.log(userExists);
     const result = yield mode_user_1.User.deleteOne({ userId: id });
     return result;
 });
@@ -53,7 +51,7 @@ const updateUserOrder = (id, orderData) => __awaiter(void 0, void 0, void 0, fun
 const getUserOrder = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield mode_user_1.User.findOne({ userId: id });
     if (!result) {
-        throw new Error("User not found");
+        throw new Error('User not found');
     }
     return result === null || result === void 0 ? void 0 : result.orders;
 });
@@ -61,7 +59,7 @@ const calculateOrders = (id) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const user = yield mode_user_1.User.findOne({ userId: id });
     if (!user) {
-        throw new Error("User not found");
+        throw new Error('User not found');
     }
     const totalOrderPrice = ((_a = user.orders) === null || _a === void 0 ? void 0 : _a.reduce((total, orders) => total + orders.price * orders.quantity, 0)) || 0;
     return totalOrderPrice;

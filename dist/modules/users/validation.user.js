@@ -26,7 +26,7 @@ exports.userValidationSchema = zod_1.z.object({
     email: zod_1.z.string().email(),
     age: zod_1.z.number().int().positive(),
     hobbies: zod_1.z.array(zod_1.z.string()).refine((data) => data.length > 0, {
-        message: "Hobbies must not be empty",
+        message: 'Hobbies must not be empty',
     }),
     address: userAddressValidation,
     isActive: zod_1.z.boolean().default(true),

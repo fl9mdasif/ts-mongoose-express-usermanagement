@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userControllers = exports.createUser = void 0;
+exports.userControllers = void 0;
 const validation_user_1 = require("./validation.user");
 const service_user_1 = require("./service.user");
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -20,7 +20,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const result = yield service_user_1.UserServices.createUser(userZodData);
         res.status(200).json({
             success: true,
-            message: "User created successfully",
+            message: 'User created successfully',
             data: result,
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,19 +28,18 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     catch (err) {
         res.status(500).json({
             success: false,
-            message: err.message || "Something went wrong",
+            message: err.message || 'Something went wrong',
             error: err,
         });
-        console.log(err);
+        // console.log(err);
     }
 });
-exports.createUser = createUser;
 const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield service_user_1.UserServices.getAllUser();
         res.status(200).json({
             success: true,
-            message: "User fetched successfully!",
+            message: 'User fetched successfully!',
             data: result,
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,7 +47,7 @@ const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     catch (err) {
         res.status(500).json({
             success: false,
-            message: err.message || "Something went wrong",
+            message: err.message || 'Something went wrong',
             error: err,
         });
     }
@@ -60,16 +59,16 @@ const getSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         if (result === null) {
             return res.status(404).json({
                 success: false,
-                message: "User not found",
+                message: 'User not found',
                 error: {
                     code: 404,
-                    description: "User not found!",
+                    description: 'User not found!',
                 },
             });
         }
         res.status(200).json({
             success: true,
-            message: "User fetched successfully!",
+            message: 'User fetched successfully!',
             data: result,
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -77,7 +76,7 @@ const getSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     catch (err) {
         res.status(500).json({
             success: false,
-            message: err.message || "Something went wrong",
+            message: err.message || 'Something went wrong',
             error: err,
         });
     }
@@ -90,10 +89,10 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         if ((result === null || result === void 0 ? void 0 : result.matchedCount) === 0) {
             return res.status(404).json({
                 success: false,
-                message: "User not found",
+                message: 'User not found',
                 error: {
                     code: 404,
-                    description: "User not found!",
+                    description: 'User not found!',
                 },
             });
         }
@@ -109,7 +108,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         };
         res.status(200).json({
             success: true,
-            message: "User updated successfully!",
+            message: 'User updated successfully!',
             data: userData,
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -117,7 +116,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     catch (err) {
         res.status(500).json({
             success: false,
-            message: err.message || "Something went wrong",
+            message: err.message || 'Something went wrong',
             error: err,
         });
     }
@@ -128,29 +127,29 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const { userId } = req.params;
         // console.log(userId);
         const result = yield service_user_1.UserServices.deleteUser(userId);
-        // console.log(result);
-        // if (result?.deletedCount === 0) {
-        //   res.status(404).json({
-        //     success: false,
-        //     message: "User not found",
-        //     error: {
-        //       code: 404,
-        //       description: "User not found!",
-        //     },
-        //   });
-        // } else {
-        res.status(200).json({
-            success: true,
-            message: "User Deleted successfully!",
-            data: result,
-        });
-        // }
+        if ((result === null || result === void 0 ? void 0 : result.deletedCount) === 0) {
+            res.status(404).json({
+                success: false,
+                message: 'User not found',
+                error: {
+                    code: 404,
+                    description: 'User not found!',
+                },
+            });
+        }
+        else {
+            res.status(200).json({
+                success: true,
+                message: 'User Deleted successfully!',
+                data: result,
+            });
+        }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
     catch (err) {
         res.status(500).json({
             success: false,
-            message: err.message || "Something went wrong",
+            message: err.message || 'Something went wrong',
             error: err,
         });
     }
@@ -164,7 +163,7 @@ const updateUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function
         const result = yield service_user_1.UserServices.updateUserOrder(userId, orderData);
         res.status(200).json({
             success: true,
-            message: "Order Created successfully!",
+            message: 'Order Created successfully!',
             data: result,
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -172,7 +171,7 @@ const updateUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function
     catch (err) {
         res.status(500).json({
             success: false,
-            message: err.message || "Something went wrong",
+            message: err.message || 'Something went wrong',
             error: err,
         });
     }
@@ -184,7 +183,7 @@ const getUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         const result = yield service_user_1.UserServices.getUserOrder(userId);
         res.status(200).json({
             success: true,
-            message: "Order fetched successfully!",
+            message: 'Order fetched successfully!',
             orders: result,
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -192,7 +191,7 @@ const getUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     catch (err) {
         res.status(500).json({
             success: false,
-            message: err.message || "Something went wrong",
+            message: err.message || 'Something went wrong',
             error: err,
         });
     }
@@ -204,7 +203,7 @@ const calculateOrders = (req, res) => __awaiter(void 0, void 0, void 0, function
         const result = yield service_user_1.UserServices.calculateOrders(userId);
         res.status(200).json({
             success: true,
-            message: "Total price calculated successfully!",
+            message: 'Total price calculated successfully!',
             totalPrice: result,
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -212,13 +211,13 @@ const calculateOrders = (req, res) => __awaiter(void 0, void 0, void 0, function
     catch (err) {
         res.status(500).json({
             success: false,
-            message: err.message || "Something went wrong",
+            message: err.message || 'Something went wrong',
             error: err,
         });
     }
 });
 exports.userControllers = {
-    createUser: exports.createUser,
+    createUser,
     getAllUser,
     getSingleUser,
     updateUser,

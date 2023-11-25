@@ -21,7 +21,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const userNameSchema = new mongoose_1.Schema({
     firstName: {
         type: String,
-        required: [true, "First name is required"],
+        required: [true, 'First name is required'],
         maxlength: [20, "first name can't be greater than 20 by length"],
         validate: function (value) {
             // validate mongoose inbuilt validator
@@ -31,7 +31,7 @@ const userNameSchema = new mongoose_1.Schema({
     },
     lastName: {
         type: String,
-        required: [true, "Last name is required"],
+        required: [true, 'Last name is required'],
     },
 });
 const userAddressSchema = new mongoose_1.Schema({
@@ -65,24 +65,24 @@ const userSchema = new mongoose_1.Schema({
     email: {
         type: String,
         unique: true,
-        required: [true, "Email is required"],
+        required: [true, 'Email is required'],
     },
     age: Number,
     hobbies: { type: [String], required: true },
     address: {
         type: userAddressSchema,
-        required: [true, "address is required"],
+        required: [true, 'address is required'],
     },
     isActive: {
         type: Boolean,
-        required: [true, "Status is required"],
+        required: [true, 'Status is required'],
         default: true,
     },
     orders: { type: [userOrderSchema] },
 });
 // creating middleware
 // before sending data to db
-userSchema.pre("save", function (next) {
+userSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const users = this;
@@ -92,8 +92,8 @@ userSchema.pre("save", function (next) {
     });
 });
 // after saved data that works {password = ""}
-userSchema.post("save", function (document, next) {
-    document.password = "";
+userSchema.post('save', function (document, next) {
+    document.password = '';
     next();
 });
 // creating custom static methods
@@ -104,5 +104,5 @@ userSchema.statics.isUserExists = function (id) {
     });
 };
 // User
-exports.User = (0, mongoose_1.model)("User", userSchema);
+exports.User = (0, mongoose_1.model)('User', userSchema);
 // '"User"' is the collection name
