@@ -1,4 +1,4 @@
-import { Model } from "mongoose";
+import { Model } from 'mongoose';
 
 export type TUserName = {
   firstName: string;
@@ -28,14 +28,14 @@ export type TUser = {
 };
 
 export type TUpdateUser = {
-  userId: number;
-  userName: string;
-  fullName: TUserName;
-  age: number;
-  email: string;
-  isActive: boolean;
-  hobbies: string[];
-  address: {
+  userId?: number;
+  userName?: string;
+  fullName?: TUserName;
+  age?: number;
+  email?: string;
+  isActive?: boolean;
+  hobbies?: string[];
+  address?: {
     street: string;
     city: string;
     country: string;

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // Define the sub-Validations
 const userNameValidation = z.object({
@@ -27,7 +27,7 @@ export const userValidationSchema = z.object({
   email: z.string().email(),
   age: z.number().int().positive(),
   hobbies: z.array(z.string()).refine((data) => data.length > 0, {
-    message: "Hobbies must not be empty",
+    message: 'Hobbies must not be empty',
   }),
   address: userAddressValidation,
   isActive: z.boolean().default(true),

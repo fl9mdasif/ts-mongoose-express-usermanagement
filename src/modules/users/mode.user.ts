@@ -1,15 +1,14 @@
-import { Schema, model } from "mongoose";
-import { TUser, TUserName, UserModel } from "./interface.user";
-import config from "../../config";
-import bcrypt from "bcrypt";
-import { response } from "express";
+import { Schema, model } from 'mongoose';
+import { TUser, TUserName, UserModel } from './interface.user';
+import config from '../../config';
+import bcrypt from 'bcrypt';
 // import config from '../config';
 
 // sub schema
 const userNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
-    required: [true, "First name is required"],
+    required: [true, 'First name is required'],
     maxlength: [20, "first name can't be greater than 20 by length"],
     validate: function (value: string) {
       // validate mongoose inbuilt validator
@@ -21,7 +20,7 @@ const userNameSchema = new Schema<TUserName>({
 
   lastName: {
     type: String,
-    required: [true, "Last name is required"],
+    required: [true, 'Last name is required'],
   },
 });
 
@@ -29,6 +28,7 @@ const userAddressSchema = new Schema({
   street: { type: String, required: true },
   city: { type: String, required: true },
   country: { type: String, required: true },
+  // _id: false,
 });
 
 const userOrderSchema = new Schema({
@@ -37,6 +37,7 @@ const userOrderSchema = new Schema({
   quantity: { type: Number, required: true },
 });
 
+// User Schema
 const userSchema = new Schema<TUser>({
   userId: {
     type: Number,
@@ -59,17 +60,17 @@ const userSchema = new Schema<TUser>({
   email: {
     type: String,
     unique: true,
-    required: [true, "Email is required"],
+    required: [true, 'Email is required'],
   },
   age: Number,
   hobbies: { type: [String], required: true },
   address: {
     type: userAddressSchema,
-    required: [true, "address is required"],
+    required: [true, 'address is required'],
   },
   isActive: {
     type: Boolean,
-    required: [true, "Status is required"],
+    required: [true, 'Status is required'],
     default: true,
   },
   orders: { type: [userOrderSchema] },
@@ -78,7 +79,7 @@ const userSchema = new Schema<TUser>({
 // creating middleware
 
 // before sending data to db
-userSchema.pre("save", async function (next) {
+userSchema.pre('save', async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const users = this;
 
@@ -86,14 +87,14 @@ userSchema.pre("save", async function (next) {
 
   users.password = await bcrypt.hash(
     users.password,
-    Number(config.bcrypt_salt_round)
+    Number(config.bcrypt_salt_round),
   );
   next();
 });
 
 // after saved data that works {password = ""}
-userSchema.post("save", function (document, next) {
-  document.password = "";
+userSchema.post('save', function (document, next) {
+  document.password = '';
   next();
 });
 
@@ -104,6 +105,6 @@ userSchema.statics.isUserExists = async function (id: string) {
 };
 
 // User
-export const User = model<TUser, UserModel>("User", userSchema);
+export const User = model<TUser, UserModel>('User', userSchema);
 
 // '"User"' is the collection name

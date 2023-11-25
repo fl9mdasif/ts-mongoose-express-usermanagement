@@ -1,11 +1,10 @@
-import mongoose from "mongoose";
-import { TOrder, TUpdateUser, TUser } from "./interface.user";
-import { User } from "./mode.user";
+import { TOrder, TUpdateUser, TUser } from './interface.user';
+import { User } from './mode.user';
 
 const createUser = async (userData: TUser) => {
   // built in static instance method
   if (await User.isUserExists(userData.userId)) {
-    throw new Error("Student1 already exists");
+    throw new Error('User already exists');
   }
   const result = await User.create(userData);
 
@@ -23,7 +22,7 @@ const getAllUser = async () => {
 const getSingleUser = async (id: string) => {
   const result = await User.findOne(
     { userId: id },
-    { userId: 1, userName: 1, fullName: 1, age: 1, email: 1, address: 1 }
+    { userId: 1, userName: 1, fullName: 1, age: 1, email: 1, address: 1 },
   );
   return result;
 
@@ -33,13 +32,15 @@ const getSingleUser = async (id: string) => {
 // update user
 const updateUser = async (userId: number | string, data: TUpdateUser) => {
   // console.log(userId);
-  const result = await User.updateOne({ userId }, data);
 
+  const result = await User.updateOne({ userId }, data);
   return result;
 };
 
 // delete user
 const deleteUser = async (id: string) => {
+  // const userExists = await User.isUserExists(id);
+
   const result = await User.deleteOne({ userId: id });
   return result;
 };
@@ -48,7 +49,7 @@ const deleteUser = async (id: string) => {
 const updateUserOrder = async (id: string, orderData: TOrder) => {
   const result = await User.updateOne(
     { userId: id },
-    { $addToSet: { orders: orderData } }
+    { $addToSet: { orders: orderData } },
   );
   return result;
 };
@@ -57,7 +58,7 @@ const updateUserOrder = async (id: string, orderData: TOrder) => {
 const getUserOrder = async (id: string) => {
   const result = await User.findOne({ userId: id });
   if (!result) {
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
   return result?.orders;
 };
@@ -65,12 +66,12 @@ const getUserOrder = async (id: string) => {
 const calculateOrders = async (id: string) => {
   const user = await User.findOne({ userId: id });
   if (!user) {
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
   const totalOrderPrice =
     user.orders?.reduce(
       (total, orders) => total + orders.price * orders.quantity,
-      0
+      0,
     ) || 0;
   return totalOrderPrice;
 };

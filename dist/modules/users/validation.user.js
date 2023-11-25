@@ -30,5 +30,5 @@ exports.userValidationSchema = zod_1.z.object({
     }),
     address: userAddressValidation,
     isActive: zod_1.z.boolean().default(true),
-    orders: zod_1.z.array(userOrderValidation).default([]),
+    orders: zod_1.z.array(userOrderValidation).default([]).optional(),
 });
