@@ -86,6 +86,7 @@ const updateUser = async (req: Request, res: Response) => {
   try {
     const userId = Number(req.params.userId);
     const updatedData = req.body;
+    const userZodData = userValidationSchema.parse(updatedData);
 
     if ((await User.isUserExists(userId)) == null) {
       return res.status(404).json({
@@ -99,17 +100,17 @@ const updateUser = async (req: Request, res: Response) => {
     }
 
     const userData = {
-      userId: updatedData.userId,
-      userName: updatedData.userName,
-      password: updatedData.password,
-      fullName: updatedData.fullName,
-      age: updatedData.age,
-      email: updatedData.email,
-      isActive: updatedData.isActive,
-      hobbies: updatedData.hobbies,
-      address: updatedData.address,
+      userId: userZodData.userId,
+      userName: userZodData.userName,
+      // password: userZodData.password,
+      fullName: userZodData.fullName,
+      age: userZodData.age,
+      email: userZodData.email,
+      isActive: userZodData.isActive,
+      hobbies: userZodData.hobbies,
+      address: userZodData.address,
     };
-    await UserServices.updateUser(userId, updatedData);
+    await UserServices.updateUser(userId, userZodData);
 
     res.status(200).json({
       success: true,

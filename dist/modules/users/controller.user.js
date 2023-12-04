@@ -90,6 +90,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const userId = Number(req.params.userId);
         const updatedData = req.body;
+        const userZodData = validation_user_1.userValidationSchema.parse(updatedData);
         if ((yield mode_user_1.User.isUserExists(userId)) == null) {
             return res.status(404).json({
                 success: false,
@@ -101,17 +102,17 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             });
         }
         const userData = {
-            userId: updatedData.userId,
-            userName: updatedData.userName,
-            password: updatedData.password,
-            fullName: updatedData.fullName,
-            age: updatedData.age,
-            email: updatedData.email,
-            isActive: updatedData.isActive,
-            hobbies: updatedData.hobbies,
-            address: updatedData.address,
+            userId: userZodData.userId,
+            userName: userZodData.userName,
+            // password: userZodData.password,
+            fullName: userZodData.fullName,
+            age: userZodData.age,
+            email: userZodData.email,
+            isActive: userZodData.isActive,
+            hobbies: userZodData.hobbies,
+            address: userZodData.address,
         };
-        yield service_user_1.UserServices.updateUser(userId, updatedData);
+        yield service_user_1.UserServices.updateUser(userId, userZodData);
         res.status(200).json({
             success: true,
             message: 'User updated successfully!',
