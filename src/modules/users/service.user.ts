@@ -1,11 +1,7 @@
-import { TOrder, TUpdateUser, TUser } from './interface.user';
+import { TOrder, TUser } from './interface.user';
 import { User } from './mode.user';
 
 const createUser = async (userData: TUser) => {
-  // built in static instance method
-  if (await User.isUserExists(userData.userId)) {
-    throw new Error('User already exists');
-  }
   const result = await User.create(userData);
 
   return result;
@@ -48,9 +44,7 @@ const getSingleUser = async (id: string) => {
 };
 
 // update user
-const updateUser = async (userId: number, data: TUpdateUser) => {
-  // console.log(userId);
-
+const updateUser = async (userId: number, data: Partial<TUser>) => {
   const result = await User.updateOne({ userId }, data);
   return result;
 };

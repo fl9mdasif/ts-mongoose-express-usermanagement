@@ -10,6 +10,10 @@ const createUser = async (req: Request, res: Response) => {
     // zod validation parse
     const userZodData = userValidationSchema.parse(userData);
 
+    // built in static instance method
+    if (await User.isUserExists(userData.userId)) {
+      throw new Error('User already exists');
+    }
     const result = await UserServices.createUser(userZodData);
 
     res.status(200).json({
@@ -52,19 +56,18 @@ const getSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
 
-    const result = await UserServices.getSingleUser(userId);
-    const user = await User.findOne({ userId });
-
-    if (!user) {
+    if ((await User.isUserExists(userId)) == null) {
       return res.status(404).json({
         success: false,
         message: 'User not found',
         error: {
           code: 404,
-          description: 'User not found',
+          description: 'User not found!',
         },
       });
     }
+
+    const result = await UserServices.getSingleUser(userId);
     res.status(200).json({
       success: true,
       message: 'User fetched successfully!',
@@ -85,20 +88,16 @@ const updateUser = async (req: Request, res: Response) => {
     const userId = Number(req.params.userId);
     const updatedData: Partial<TUser> = req.body;
 
-    const user = await User.findOne({ userId });
-
-    if (!user) {
+    if ((await User.isUserExists(userId)) == null) {
       return res.status(404).json({
         success: false,
         message: 'User not found',
         error: {
           code: 404,
-          description: 'User not found',
+          description: 'User not found!',
         },
       });
     }
-
-    await UserServices.updateUser(userId, updatedData);
 
     const userData = {
       userId: updatedData?.userId,
@@ -110,6 +109,7 @@ const updateUser = async (req: Request, res: Response) => {
       hobbies: updatedData?.hobbies,
       address: updatedData?.address,
     };
+    await UserServices.updateUser(userId, updatedData);
 
     res.status(200).json({
       success: true,
@@ -131,16 +131,14 @@ const updateUser = async (req: Request, res: Response) => {
 const deleteUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    // console.log(userId);
-    const user = await User.findOne({ userId });
 
-    if (!user) {
+    if ((await User.isUserExists(userId)) == null) {
       return res.status(404).json({
         success: false,
         message: 'User not found',
         error: {
           code: 404,
-          description: 'User not found',
+          description: 'User not found!',
         },
       });
     }
@@ -169,8 +167,8 @@ const updateUserOrder = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
     const orderData = req.body;
-    const result = await UserServices.updateUserOrder(userId, orderData);
-    if (result?.matchedCount === 0) {
+
+    if ((await User.isUserExists(userId)) == null) {
       return res.status(404).json({
         success: false,
         message: 'User not found',
@@ -181,10 +179,12 @@ const updateUserOrder = async (req: Request, res: Response) => {
       });
     }
 
+    await UserServices.updateUserOrder(userId, orderData);
+
     res.status(200).json({
       success: true,
       message: 'Order Created successfully!',
-      data: result,
+      data: null,
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
@@ -201,16 +201,13 @@ const getUserOrder = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
 
-    // console.log(result);
-    const user = await User.findOne({ userId });
-
-    if (!user) {
+    if ((await User.isUserExists(userId)) == null) {
       return res.status(404).json({
         success: false,
         message: 'User not found',
         error: {
           code: 404,
-          description: 'User not found',
+          description: 'User not found!',
         },
       });
     }
@@ -220,7 +217,7 @@ const getUserOrder = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: 'Order fetched successfully!',
-      orders: result,
+      data: { orders: result },
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
@@ -237,19 +234,16 @@ const calculateOrders = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
 
-    const user = await User.findOne({ userId });
-
-    if (!user) {
+    if ((await User.isUserExists(userId)) == null) {
       return res.status(404).json({
         success: false,
         message: 'User not found',
         error: {
           code: 404,
-          description: 'User not found',
+          description: 'User not found!',
         },
       });
     }
-
     const result = await UserServices.calculateOrders(userId);
 
     res.status(200).json({

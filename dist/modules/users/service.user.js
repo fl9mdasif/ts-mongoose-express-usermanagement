@@ -24,6 +24,7 @@ const getAllUser = () => __awaiter(void 0, void 0, void 0, function* () {
         {
             $project: {
                 _id: 0,
+                userId: 1,
                 userName: 1,
                 fullName: 1,
                 age: 1,
