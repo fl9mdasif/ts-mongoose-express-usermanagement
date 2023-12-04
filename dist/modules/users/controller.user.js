@@ -18,6 +18,10 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const userData = req.body;
         // zod validation parse
         const userZodData = validation_user_1.userValidationSchema.parse(userData);
+        // built in static instance method
+        if (yield mode_user_1.User.isUserExists(userData.userId)) {
+            throw new Error('User already exists');
+        }
         const result = yield service_user_1.UserServices.createUser(userZodData);
         res.status(200).json({
             success: true,
@@ -56,18 +60,17 @@ const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 const getSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId } = req.params;
-        const result = yield service_user_1.UserServices.getSingleUser(userId);
-        const user = yield mode_user_1.User.findOne({ userId });
-        if (!user) {
+        if ((yield mode_user_1.User.isUserExists(userId)) == null) {
             return res.status(404).json({
                 success: false,
                 message: 'User not found',
                 error: {
                     code: 404,
-                    description: 'User not found',
+                    description: 'User not found!',
                 },
             });
         }
+        const result = yield service_user_1.UserServices.getSingleUser(userId);
         res.status(200).json({
             success: true,
             message: 'User fetched successfully!',
@@ -87,18 +90,16 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const userId = Number(req.params.userId);
         const updatedData = req.body;
-        const user = yield mode_user_1.User.findOne({ userId });
-        if (!user) {
+        if ((yield mode_user_1.User.isUserExists(userId)) == null) {
             return res.status(404).json({
                 success: false,
                 message: 'User not found',
                 error: {
                     code: 404,
-                    description: 'User not found',
+                    description: 'User not found!',
                 },
             });
         }
-        yield service_user_1.UserServices.updateUser(userId, updatedData);
         const userData = {
             userId: updatedData === null || updatedData === void 0 ? void 0 : updatedData.userId,
             userName: updatedData === null || updatedData === void 0 ? void 0 : updatedData.userName,
@@ -109,6 +110,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             hobbies: updatedData === null || updatedData === void 0 ? void 0 : updatedData.hobbies,
             address: updatedData === null || updatedData === void 0 ? void 0 : updatedData.address,
         };
+        yield service_user_1.UserServices.updateUser(userId, updatedData);
         res.status(200).json({
             success: true,
             message: 'User updated successfully!',
@@ -129,15 +131,13 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId } = req.params;
-        // console.log(userId);
-        const user = yield mode_user_1.User.findOne({ userId });
-        if (!user) {
+        if ((yield mode_user_1.User.isUserExists(userId)) == null) {
             return res.status(404).json({
                 success: false,
                 message: 'User not found',
                 error: {
                     code: 404,
-                    description: 'User not found',
+                    description: 'User not found!',
                 },
             });
         }
@@ -163,8 +163,7 @@ const updateUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function
     try {
         const { userId } = req.params;
         const orderData = req.body;
-        const result = yield service_user_1.UserServices.updateUserOrder(userId, orderData);
-        if ((result === null || result === void 0 ? void 0 : result.matchedCount) === 0) {
+        if ((yield mode_user_1.User.isUserExists(userId)) == null) {
             return res.status(404).json({
                 success: false,
                 message: 'User not found',
@@ -174,10 +173,11 @@ const updateUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function
                 },
             });
         }
+        yield service_user_1.UserServices.updateUserOrder(userId, orderData);
         res.status(200).json({
             success: true,
             message: 'Order Created successfully!',
-            data: result,
+            data: null,
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
@@ -193,15 +193,13 @@ const updateUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function
 const getUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId } = req.params;
-        // console.log(result);
-        const user = yield mode_user_1.User.findOne({ userId });
-        if (!user) {
+        if ((yield mode_user_1.User.isUserExists(userId)) == null) {
             return res.status(404).json({
                 success: false,
                 message: 'User not found',
                 error: {
                     code: 404,
-                    description: 'User not found',
+                    description: 'User not found!',
                 },
             });
         }
@@ -209,7 +207,7 @@ const getUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.status(200).json({
             success: true,
             message: 'Order fetched successfully!',
-            orders: result,
+            data: { orders: result },
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
@@ -225,14 +223,13 @@ const getUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 const calculateOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId } = req.params;
-        const user = yield mode_user_1.User.findOne({ userId });
-        if (!user) {
+        if ((yield mode_user_1.User.isUserExists(userId)) == null) {
             return res.status(404).json({
                 success: false,
                 message: 'User not found',
                 error: {
                     code: 404,
-                    description: 'User not found',
+                    description: 'User not found!',
                 },
             });
         }

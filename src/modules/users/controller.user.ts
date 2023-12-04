@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { userValidationSchema } from './validation.user';
 import { UserServices } from './service.user';
-import { TUser } from './interface.user';
 import { User } from './mode.user';
 
 const createUser = async (req: Request, res: Response) => {
@@ -86,7 +85,7 @@ const getSingleUser = async (req: Request, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
   try {
     const userId = Number(req.params.userId);
-    const updatedData: Partial<TUser> = req.body;
+    const updatedData = req.body;
 
     if ((await User.isUserExists(userId)) == null) {
       return res.status(404).json({
@@ -100,14 +99,15 @@ const updateUser = async (req: Request, res: Response) => {
     }
 
     const userData = {
-      userId: updatedData?.userId,
-      userName: updatedData?.userName,
-      fullName: updatedData?.fullName,
-      age: updatedData?.age,
-      email: updatedData?.email,
-      isActive: updatedData?.isActive,
-      hobbies: updatedData?.hobbies,
-      address: updatedData?.address,
+      userId: updatedData.userId,
+      userName: updatedData.userName,
+      password: updatedData.password,
+      fullName: updatedData.fullName,
+      age: updatedData.age,
+      email: updatedData.email,
+      isActive: updatedData.isActive,
+      hobbies: updatedData.hobbies,
+      address: updatedData.address,
     };
     await UserServices.updateUser(userId, updatedData);
 

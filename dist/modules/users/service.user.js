@@ -12,10 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserServices = void 0;
 const mode_user_1 = require("./mode.user");
 const createUser = (userData) => __awaiter(void 0, void 0, void 0, function* () {
-    // built in static instance method
-    if (yield mode_user_1.User.isUserExists(userData.userId)) {
-        throw new Error('User already exists');
-    }
     const result = yield mode_user_1.User.create(userData);
     return result;
 });
@@ -51,7 +47,6 @@ const getSingleUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 // update user
 const updateUser = (userId, data) => __awaiter(void 0, void 0, void 0, function* () {
-    // console.log(userId);
     const result = yield mode_user_1.User.updateOne({ userId }, data);
     return result;
 });

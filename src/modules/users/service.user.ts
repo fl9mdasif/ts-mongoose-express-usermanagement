@@ -8,19 +8,8 @@ const createUser = async (userData: TUser) => {
 };
 
 const getAllUser = async () => {
-  const result = await User.aggregate([
-    {
-      $project: {
-        _id: 0,
-        userId: 1,
-        userName: 1,
-        fullName: 1,
-        age: 1,
-        email: 1,
-        address: 1,
-      },
-    },
-  ]);
+  const result = await User.find();
+
   return result;
 };
 
@@ -44,7 +33,7 @@ const getSingleUser = async (id: string) => {
 };
 
 // update user
-const updateUser = async (userId: number, data: Partial<TUser>) => {
+const updateUser = async (userId: number, data: TUser) => {
   const result = await User.updateOne({ userId }, data);
   return result;
 };

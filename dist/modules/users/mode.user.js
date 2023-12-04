@@ -108,9 +108,9 @@ userSchema.post('save', function (document, next) {
     next();
 });
 // creating custom static methods
-userSchema.statics.isUserExists = function (id) {
+userSchema.statics.isUserExists = function (userId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const existingUser = yield exports.User.findOne({ id });
+        const existingUser = yield exports.User.findOne({ userId });
         return existingUser;
     });
 };

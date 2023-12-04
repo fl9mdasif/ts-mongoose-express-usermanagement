@@ -61,7 +61,7 @@ const userSchema = new Schema<TUser>({
 
   password: {
     type: String,
-    required: true,
+    required: [true, 'Password is required'],
   },
 
   fullName: userNameSchema,
@@ -100,25 +100,36 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// before sending data to db
+//delete password field in response
+userSchema.methods.toJSON = function () {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  const userObject = user.toObject();
+
+  delete userObject.password;
+
+  return userObject;
+};
+
 // userSchema.pre('updateOne', async function (next) {
-//   // eslint-disable-next-line @typescript-eslint/no-this-alias
-//   const users = this;
+//   const update = this;
+//   // as { $set?: { password?: string } };
 
-//   // Store hashing  password into DB.
+//   // Check if the password field is being updated
+//   if (!update) {
+//     update.password = await bcrypt.hash(
+//       update?.password,
+//       Number(config.bcrypt_salt_round),
+//     );
+//   }
 
-//   users.password = await bcrypt.hash(
-//     users?.password,
-//     Number(config.bcrypt_salt_round),
-//   );
 //   next();
 // });
-
 // after saved data that works {password = ""}
-userSchema.post('save', function (document, next) {
-  document.password = '';
-  next();
-});
+// userSchema.post('save', function (document, next) {
+//   document.password = '';
+//   next();
+// });
 
 // creating custom static methods
 userSchema.statics.isUserExists = async function (userId: string) {
