@@ -8,5 +8,9 @@
 - open terminal and write
 
 ```npm
+npm install
+```
+
+```npm
 npm run start-dev
 ```
