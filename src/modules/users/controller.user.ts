@@ -5,8 +5,7 @@ import { TUser } from './interface.user';
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const { user: userData } = req.body;
-
+    const userData = req.body;
     // zod validation parse
     const userZodData = userValidationSchema.parse(userData);
 
