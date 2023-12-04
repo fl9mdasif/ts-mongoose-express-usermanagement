@@ -93,13 +93,26 @@ userSchema.pre('save', async function (next) {
   const users = this;
 
   // Store hashing  password into DB.
-
   users.password = await bcrypt.hash(
     users.password,
     Number(config.bcrypt_salt_round),
   );
   next();
 });
+
+// before sending data to db
+// userSchema.pre('updateOne', async function (next) {
+//   // eslint-disable-next-line @typescript-eslint/no-this-alias
+//   const users = this;
+
+//   // Store hashing  password into DB.
+
+//   users.password = await bcrypt.hash(
+//     users?.password,
+//     Number(config.bcrypt_salt_round),
+//   );
+//   next();
+// });
 
 // after saved data that works {password = ""}
 userSchema.post('save', function (document, next) {

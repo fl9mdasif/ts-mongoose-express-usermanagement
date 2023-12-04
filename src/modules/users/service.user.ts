@@ -16,6 +16,7 @@ const getAllUser = async () => {
     {
       $project: {
         _id: 0,
+        userId: 1,
         userName: 1,
         fullName: 1,
         age: 1,
@@ -47,7 +48,7 @@ const getSingleUser = async (id: string) => {
 };
 
 // update user
-const updateUser = async (userId: number | string, data: TUpdateUser) => {
+const updateUser = async (userId: number, data: TUpdateUser) => {
   // console.log(userId);
 
   const result = await User.updateOne({ userId }, data);
