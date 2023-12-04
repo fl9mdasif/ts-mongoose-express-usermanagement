@@ -21,15 +21,7 @@ const getAllUser = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 // get single user
 const getSingleUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield mode_user_1.User.findOne({ userId: id }, {
-        _id: 0,
-        userId: 1,
-        userName: 1,
-        fullName: 1,
-        age: 1,
-        email: 1,
-        address: 1,
-    });
+    const result = yield mode_user_1.User.findOne({ userId: id });
     return result;
     // const result = User.aggregate([{ $match: { userId: id } }]);
 });
