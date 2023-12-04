@@ -101,14 +101,15 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             });
         }
         const userData = {
-            userId: updatedData === null || updatedData === void 0 ? void 0 : updatedData.userId,
-            userName: updatedData === null || updatedData === void 0 ? void 0 : updatedData.userName,
-            fullName: updatedData === null || updatedData === void 0 ? void 0 : updatedData.fullName,
-            age: updatedData === null || updatedData === void 0 ? void 0 : updatedData.age,
-            email: updatedData === null || updatedData === void 0 ? void 0 : updatedData.email,
-            isActive: updatedData === null || updatedData === void 0 ? void 0 : updatedData.isActive,
-            hobbies: updatedData === null || updatedData === void 0 ? void 0 : updatedData.hobbies,
-            address: updatedData === null || updatedData === void 0 ? void 0 : updatedData.address,
+            userId: updatedData.userId,
+            userName: updatedData.userName,
+            password: updatedData.password,
+            fullName: updatedData.fullName,
+            age: updatedData.age,
+            email: updatedData.email,
+            isActive: updatedData.isActive,
+            hobbies: updatedData.hobbies,
+            address: updatedData.address,
         };
         yield service_user_1.UserServices.updateUser(userId, updatedData);
         res.status(200).json({
