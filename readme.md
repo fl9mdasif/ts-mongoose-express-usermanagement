@@ -54,6 +54,7 @@ npm run start-dev
     "price": 99,
     "quantity":3
 }
-  ```
+```
+
 * http://localhost:5001/api/users/1/orders/total-price     // calculate users orders 
 
