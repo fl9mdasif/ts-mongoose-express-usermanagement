@@ -1,5 +1,7 @@
+import config from '../../config';
 import { TOrder, TUser } from './interface.user';
-import { User } from './mode.user';
+import { User } from './model.user';
+import bcrypt from 'bcrypt';
 
 const createUser = async (userData: TUser) => {
   const result = await User.create(userData);
@@ -23,6 +25,13 @@ const getSingleUser = async (id: string) => {
 
 // update user
 const updateUser = async (userId: number, data: TUser) => {
+  if (data.password) {
+    data.password = await bcrypt.hash(
+      data.password,
+      Number(config.bcrypt_salt_round),
+    );
+  }
+
   const result = await User.updateOne({ userId }, data);
   return result;
 };
@@ -49,6 +58,7 @@ const getUserOrder = async (id: string) => {
   return result?.orders;
 };
 
+// calculate total price
 const calculateOrders = async (id: string) => {
   const user = await User.findOne({ userId: id });
 

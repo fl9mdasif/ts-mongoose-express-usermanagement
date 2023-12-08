@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import { userValidationSchema } from './validation.user';
 import { UserServices } from './service.user';
-import { User } from './mode.user';
+import { User } from './model.user';
 
+// create user
 const createUser = async (req: Request, res: Response) => {
   try {
     const userData = req.body;
@@ -32,6 +33,7 @@ const createUser = async (req: Request, res: Response) => {
   }
 };
 
+// get all user
 const getAllUser = async (req: Request, res: Response) => {
   try {
     const result = await UserServices.getAllUser();
@@ -51,6 +53,7 @@ const getAllUser = async (req: Request, res: Response) => {
   }
 };
 
+// get single user
 const getSingleUser = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
@@ -82,6 +85,7 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+// update user
 const updateUser = async (req: Request, res: Response) => {
   try {
     const userId = Number(req.params.userId);
@@ -101,8 +105,7 @@ const updateUser = async (req: Request, res: Response) => {
 
     const userData = {
       userId: userZodData.userId,
-      userName: userZodData.userName,
-      // password: userZodData.password,
+      username: userZodData.username,
       fullName: userZodData.fullName,
       age: userZodData.age,
       email: userZodData.email,

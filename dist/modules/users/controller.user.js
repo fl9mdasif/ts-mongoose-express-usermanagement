@@ -12,14 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userControllers = void 0;
 const validation_user_1 = require("./validation.user");
 const service_user_1 = require("./service.user");
-const mode_user_1 = require("./mode.user");
+const model_user_1 = require("./model.user");
+// create user
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userData = req.body;
         // zod validation parse
         const userZodData = validation_user_1.userValidationSchema.parse(userData);
         // built in static instance method
-        if (yield mode_user_1.User.isUserExists(userData.userId)) {
+        if (yield model_user_1.User.isUserExists(userData.userId)) {
             throw new Error('User already exists');
         }
         const result = yield service_user_1.UserServices.createUser(userZodData);
@@ -39,6 +40,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         // console.log(err);
     }
 });
+// get all user
 const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield service_user_1.UserServices.getAllUser();
@@ -57,10 +59,11 @@ const getAllUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
+// get single user
 const getSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId } = req.params;
-        if ((yield mode_user_1.User.isUserExists(userId)) == null) {
+        if ((yield model_user_1.User.isUserExists(userId)) == null) {
             return res.status(404).json({
                 success: false,
                 message: 'User not found',
@@ -86,12 +89,13 @@ const getSingleUser = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
 });
+// update user
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userId = Number(req.params.userId);
         const updatedData = req.body;
         const userZodData = validation_user_1.userValidationSchema.parse(updatedData);
-        if ((yield mode_user_1.User.isUserExists(userId)) == null) {
+        if ((yield model_user_1.User.isUserExists(userId)) == null) {
             return res.status(404).json({
                 success: false,
                 message: 'User not found',
@@ -103,8 +107,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
         const userData = {
             userId: userZodData.userId,
-            userName: userZodData.userName,
-            // password: userZodData.password,
+            username: userZodData.username,
             fullName: userZodData.fullName,
             age: userZodData.age,
             email: userZodData.email,
@@ -133,7 +136,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId } = req.params;
-        if ((yield mode_user_1.User.isUserExists(userId)) == null) {
+        if ((yield model_user_1.User.isUserExists(userId)) == null) {
             return res.status(404).json({
                 success: false,
                 message: 'User not found',
@@ -165,7 +168,7 @@ const updateUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function
     try {
         const { userId } = req.params;
         const orderData = req.body;
-        if ((yield mode_user_1.User.isUserExists(userId)) == null) {
+        if ((yield model_user_1.User.isUserExists(userId)) == null) {
             return res.status(404).json({
                 success: false,
                 message: 'User not found',
@@ -195,7 +198,7 @@ const updateUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function
 const getUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId } = req.params;
-        if ((yield mode_user_1.User.isUserExists(userId)) == null) {
+        if ((yield model_user_1.User.isUserExists(userId)) == null) {
             return res.status(404).json({
                 success: false,
                 message: 'User not found',
@@ -225,7 +228,7 @@ const getUserOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 const calculateOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userId } = req.params;
-        if ((yield mode_user_1.User.isUserExists(userId)) == null) {
+        if ((yield model_user_1.User.isUserExists(userId)) == null) {
             return res.status(404).json({
                 success: false,
                 message: 'User not found',

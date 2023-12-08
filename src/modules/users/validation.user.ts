@@ -20,7 +20,7 @@ const userOrderValidation = z.object({
 // Define the user Validation
 export const userValidationSchema = z.object({
   userId: z.number().int().positive(),
-  userName: z.string().min(1, { message: 'User name is required' }),
+  username: z.string().min(1, { message: 'User name is required' }),
   password: z.string().min(1, { message: 'Password is required' }),
   fullName: userNameValidation,
   email: z.string().email({ message: 'Invalid email format' }),

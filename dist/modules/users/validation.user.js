@@ -19,7 +19,7 @@ const userOrderValidation = zod_1.z.object({
 // Define the user Validation
 exports.userValidationSchema = zod_1.z.object({
     userId: zod_1.z.number().int().positive(),
-    userName: zod_1.z.string().min(1, { message: 'User name is required' }),
+    username: zod_1.z.string().min(1, { message: 'User name is required' }),
     password: zod_1.z.string().min(1, { message: 'Password is required' }),
     fullName: userNameValidation,
     email: zod_1.z.string().email({ message: 'Invalid email format' }),

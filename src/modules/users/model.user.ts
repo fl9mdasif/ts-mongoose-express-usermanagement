@@ -53,7 +53,7 @@ const userSchema = new Schema<TUser>({
     required: true,
     unique: true,
   },
-  userName: {
+  username: {
     type: String,
     required: true,
     unique: true,
@@ -100,20 +100,7 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// userSchema.pre('updateOne', async function (next) {
-//   const update = this;
-//   // as { $set?: { password?: string } };
-//   // console.log('u', this);
-//   // Check if the password field is being updated
-//   if (update.getUpdate()) {
-//     update.password = await bcrypt.hash(
-//       update?.password,
-//       Number(config.bcrypt_salt_round),
-//     );
-//   }
-
-//   next();
-// });
+//
 
 //delete password field in response
 userSchema.methods.toJSON = function () {
